@@ -19,9 +19,8 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 
 void KalmanFilter::Predict() {
   /**
-  TODO:
-    * predict the state
-  */
+   * Predict the state
+   */
   x_ = F_ * x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
@@ -29,9 +28,8 @@ void KalmanFilter::Predict() {
 
 void KalmanFilter::Update(const VectorXd &z) {
   /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
+   * Update the state by using Kalman Filter equations
+   */
   VectorXd y = z - H_ * x_;
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
@@ -47,17 +45,20 @@ void KalmanFilter::Update(const VectorXd &z) {
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
-  float rho = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
+   * Update the state by using Extended Kalman Filter equations
+   */
+  float rho = sqrt(x_(0) * x_(0) + x_(1) * x_(1));
+  if (fabs(rho) < 0.0001) {
+    rho = 0.0001;
+  }
   float phi = atan2(x_(1), x_(0));
-  float rho_dot = (x_(0)*x_(2) + x_(1)*x_(3))/rho;
+  float rho_dot = (x_(0) * x_(2) + x_(1) * x_(3)) / rho;
 
-  VectorXd hi(3);
-  hi << rho, phi, rho_dot;
+  VectorXd hp(3);
+  hp << rho, phi, rho_dot;
 
-  VectorXd y = z - hi;
+  VectorXd y = z - hp;
+  y[1] = fmod(y[1], M_PI); //normalize - slack hack
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
