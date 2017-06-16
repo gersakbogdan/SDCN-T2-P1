@@ -58,3 +58,16 @@ OUTPUT: values provided by the c++ program to the simulator
 4. Run it: `./ExtendedKF path/to/input.txt path/to/output.txt`. You can find
    some sample inputs in 'data/'.
     - eg. `./ExtendedKF ../data/obj_pose-laser-radar-synthetic-input.txt`
+
+[//]: # (Image References)
+
+[image1]: ./output/simulator.gif "Simulator Test"
+[video1]: ./output/simulator.mov "Simulator Test Video"
+
+## Results
+
+![image1]
+
+Here's a [link to my video result](./output/simulator.mov) (mov).
+
+
